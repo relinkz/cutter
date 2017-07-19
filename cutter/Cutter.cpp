@@ -249,11 +249,92 @@ int Cutter::Run()
 	return 0;
 }
 
+int Cutter::Run2()
+{
+	float deltaT = (float)this->m_sl.GetLast() / (float)this->m_sl.GetFirst();
+	while(deltaT < this->m_T && this->m_sl.GetNrOfElements() < 500)
+	{
+		int higestVeg = this->m_sl.RemoveFirst();
+		int lowestVeg = this->m_sl.GetLast();
+
+		int w1 = 0;
+		int w2 = 0;
+
+		//goal is to make this piece lower then the next highest but above the lowest
+		
+		//if the veg to be cut become less then the recent lowest
+		//if the highest is a multiple of the lowest 
+		if (higestVeg % lowestVeg == 0)
+		{
+			while (higestVeg != 0)
+			{
+				/*
+				ToDo
+				this shit is not bulletproof yet, failes 2nd test
+
+				 */
+				w1 = higestVeg - lowestVeg;
+				w2 = higestVeg - lowestVeg;
+
+				this->m_sl.Insert(w1);
+				this->m_sl.Insert(w2);
+
+				higestVeg -= lowestVeg * 2;
+				this->m_nrOfCuts++;
+			}
+		}
+		//there is no solution with the parts we have now to satisfy the
+		//condition, we need to decrease the lowest veg piece
+		else
+		{
+
+			//find the lowest cut piece that they share
+			int closestCutVal = higestVeg % lowestVeg;
+
+			//cut the largest piece to this value
+			this->m_sl.Insert(higestVeg - closestCutVal);
+
+			//add remaining
+			this->m_sl.Insert(closestCutVal);
+
+			//add to nrofcuts
+			this->m_nrOfCuts++;
+		}
+		deltaT = (float)this->m_sl.GetLast() / (float)this->m_sl.GetFirst();
+	}
+	
+	return 0;
+}
+
 std::string Cutter::TestRun()
 {
 	TestResult result = TestResult();
 	std::stringstream toString;
 
+	//this->m_T = 0.99;
+
+	//this->m_sl.Insert(2000);
+	//this->m_sl.Insert(3000);
+	//this->m_sl.Insert(4000);
+	//this->Run2();
+
+	this->m_T = 0.80;
+
+	this->m_sl.Insert(1000);
+	this->m_sl.Insert(1400);
+	this->Run2();
+
+
+
+	toString << this->m_sl.PrintAll() << std::endl;
+	toString << "cuts: " << this->m_nrOfCuts << std::endl;
+
+	return toString.str();
+
+	
+
+
+	/*
 	//test 1
 	if (this->Initialize(0.99f, 10) != 0)
 		result.failedRuntime[0] = true;
@@ -271,6 +352,8 @@ std::string Cutter::TestRun()
 
 	this->m_ResetData();
 
+
+	
 	//test 2
 	if (this->Initialize(0.80f, 10) != 0)
 		result.failedRuntime[1] = true;
@@ -372,6 +455,7 @@ std::string Cutter::TestRun()
 	}
 
 	return toString.str();
+	*/
 }
 
 int Cutter::GetResult() const

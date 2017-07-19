@@ -1,8 +1,9 @@
 #ifndef CUTTER_H
 #define CUTTER_H
 
-#include <string>
-#include <sstream>
+#include "SortedList.h"
+//#include <string>
+//#include <sstream>
 
 /*
 This class does the calculations to solve the algorithm, it holds a dynamic allocated array
@@ -54,6 +55,7 @@ struct TestResult
 class Cutter
 {
 private:
+	SortedList m_sl;
 	double* m_values;
 	int m_capacity;
 	int m_size;
@@ -84,6 +86,7 @@ public:
 	int Insert(int weight);
 
 	int Run();
+	int Run2();
 	std::string TestRun();
 
 	int GetResult() const;

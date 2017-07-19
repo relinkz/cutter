@@ -4,7 +4,7 @@
 int main()
 {
 	//present memoryleaks in visualstudio
-	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	Cutter dummy = Cutter();
 	int const SIZE = 20; //sets the capacity of the dynamic allocated array in cutter class
 /*
