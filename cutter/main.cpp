@@ -7,10 +7,9 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	Cutter dummy = Cutter();
 	int const SIZE = 20; //sets the capacity of the dynamic allocated array in cutter class
-/*
+
 	float tempT = 0.0;
 	int nrOfInputs, veg = 0;
-	bool badInput = false;
 
 	//query the number of starting pieces
 	std::cin >> tempT >> nrOfInputs;
@@ -20,27 +19,28 @@ int main()
 		return 1;
 	}
 
-	if (dummy.Initialize(tempT, SIZE) != 0)
-		badInput = true;
-
 	//Create the dynamic allocated array
-	for (int i = 0; i < nrOfInputs && badInput == false; i++)
+	for (int i = 0; i < nrOfInputs; i++)
 	{
 		std::cin >> veg;
-		if (dummy.CutweightAdd(veg) != 0)
-			badInput = true;
+		if (veg < 1000000)
+		{
+			if (dummy.AddVegetable(veg) == false)
+				return 0; //nrOfelement exeeded in list, n < 500
+		}
 	}
+	dummy.SetT(tempT);
 
-	if(badInput == false)
-		dummy.Run();
+	if (dummy.Run() != 0)
+		return 0; // runtime error
 
 	//print number on cuts
 	std::cout << dummy.GetResult() << std::endl;
 	//debug and view the cut array
 	//std::cout << dummy.ToString() << std::endl;
 
-	*/
-	std::cout << dummy.TestRun() << std::endl;
+
+	//std::cout << dummy.TestRun() << std::endl;
 
 	system("PAUSE");
 

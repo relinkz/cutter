@@ -38,6 +38,9 @@ public:
 	Cutter();
 	virtual ~Cutter();
 
+	void SetT(const float &T);
+	bool AddVegetable(const int &weight);
+
 	int Run();
 	std::string TestRun();
 

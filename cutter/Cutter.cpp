@@ -1,5 +1,5 @@
 #include "Cutter.h"
-#include <iostream>
+//#include <iostream>
 
 Cutter::Cutter()
 {
@@ -9,6 +9,19 @@ Cutter::Cutter()
 
 Cutter::~Cutter()
 {
+}
+
+void Cutter::SetT(const float &T)
+{
+	this->m_T = T;
+}
+
+bool Cutter::AddVegetable(const int & weight)
+{
+	bool result = true;
+	if (this->m_sl.Insert(weight) == false)
+		result = false;
+	return result;
 }
 
 int Cutter::Run()
