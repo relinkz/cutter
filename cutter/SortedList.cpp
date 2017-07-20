@@ -1,7 +1,6 @@
 #include "SortedList.h"
 
 
-
 SortedList::SortedList()
 {
 	this->m_start = NULL;
@@ -9,19 +8,9 @@ SortedList::SortedList()
 	this->m_nrOfElements = 0;
 }
 
-
 SortedList::~SortedList()
 {
-	Node* walker = NULL;
-	Node* ereaser = NULL;
-
-	walker = this->m_start;
-	while (walker != NULL)
-	{
-		ereaser = walker;
-		walker = walker->next;
-		delete ereaser;
-	}
+	this->FlushList();
 }
 
 bool SortedList::Insert(int element)
@@ -36,6 +25,7 @@ bool SortedList::Insert(int element)
 	{
 		this->m_start = toAdd;
 		this->m_end = toAdd;
+		result = true;
 	}
 	else
 	{
@@ -138,6 +128,24 @@ int SortedList::RemoveLast()
 
 	this->m_nrOfElements--;
 	return val;
+}
+
+void SortedList::FlushList()
+{
+	Node* walker = NULL;
+	Node* ereaser = NULL;
+
+	walker = this->m_start;
+	while (walker != NULL)
+	{
+		ereaser = walker;
+		walker = walker->next;
+		delete ereaser;
+	}
+	this->m_start = NULL;
+	this->m_end = NULL;
+
+	this->m_nrOfElements = 0;
 }
 
 std::string SortedList::PrintAll() const

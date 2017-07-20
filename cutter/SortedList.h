@@ -26,7 +26,6 @@ private:
 	Node* m_start;
 	Node* m_end;
 	int m_nrOfElements;
-
 public:
 	SortedList();
 	virtual ~SortedList();
@@ -38,6 +37,7 @@ public:
 
 	int RemoveFirst();
 	int RemoveLast();
+	void FlushList();
 	
 	std::string PrintAll() const;
 };

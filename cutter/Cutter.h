@@ -11,30 +11,6 @@ of ints (m_values) that is expandable should the temporary limit be exceeded, wi
 ExpandArray()
 */
 
-struct PeakValues
-{
-	int highestVal;
-	int highestPos;
-
-	int lowestVal;
-	int lowestPos;
-
-	float activeT;
-	int average;
-
-	PeakValues() 
-	{
-		highestVal = -1;
-		highestPos = -1;
-
-		lowestVal = -1;
-		lowestPos = -1;
-
-		activeT = -1;
-		average = -1;
-	}
-};
-
 struct TestResult
 {
 	int nrOfCuts[10];
@@ -56,44 +32,16 @@ class Cutter
 {
 private:
 	SortedList m_sl;
-	double* m_values;
-	int m_capacity;
-	int m_size;
-
-	double m_totalWeight;
-	float m_T;
-	float m_activeRatio;
 	int m_nrOfCuts;
-
-	bool m_findWeight(int toFind) const;
-	int Cut(int element, int into);		//return the rest product
-	int Split(int element);
-	PeakValues FindHighAndLowValue() const; //return position of the highest value in arr
-	bool RatioCheck(PeakValues peaks);
-	void ExpandArray();
-	bool CheckArrayCapacity();
-
-	void m_ResetData();
-
+	float m_T;
 public:
 	Cutter();
 	virtual ~Cutter();
 
-	//return 1 if T or N are to large
-	int Initialize(float T, int N);
-
-	int CutweightAdd(int weightSize);
-	int Insert(int weight);
-
 	int Run();
-	int Run2();
 	std::string TestRun();
 
 	int GetResult() const;
-	
-	
-
-	std::string ToString() const;
 };
 
 #endif
