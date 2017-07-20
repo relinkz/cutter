@@ -4,7 +4,8 @@
 int main()
 {
 	//present memoryleaks in visualstudio
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	
 	Cutter dummy = Cutter();
 	int const SIZE = 20; //sets the capacity of the dynamic allocated array in cutter class
 
@@ -36,11 +37,6 @@ int main()
 
 	//print number on cuts
 	std::cout << dummy.GetResult() << std::endl;
-	//debug and view the cut array
-	//std::cout << dummy.ToString() << std::endl;
-
-
-	//std::cout << dummy.TestRun() << std::endl;
 
 	system("PAUSE");
 

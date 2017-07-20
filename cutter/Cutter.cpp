@@ -1,5 +1,4 @@
 #include "Cutter.h"
-//#include <iostream>
 
 Cutter::Cutter()
 {
@@ -84,11 +83,6 @@ int Cutter::Run()
 			this->m_nrOfCuts++;
 		}
 		deltaT = (float)this->m_sl.GetLast() / (float)this->m_sl.GetFirst();
-		/*
-		std::cout << this->m_sl.PrintAll() << std::endl;
-		std::cout << "DeltaT: " << deltaT << " T: " << this->m_T << std::endl;
-		system("pause");
-		*/
 	}
 	
 	return 0;
