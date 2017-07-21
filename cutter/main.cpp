@@ -4,10 +4,18 @@
 int main()
 {
 	//present memoryleaks in visualstudio
-	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	
-	Cutter dummy = Cutter();
-	int const SIZE = 20; //sets the capacity of the dynamic allocated array in cutter class
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	Vertex* test = new Vertex();
+	test->Init();
+
+	test->pieces->Insert(20);
+	test->pieces->Insert(30);
+	test->pieces->Insert(40);
+
+
+
+	Cutter dummy = Cutter(0.99f, test);
+	//int const SIZE = 20; //sets the capacity of the dynamic allocated array in cutter class
 /*
 	float tempT = 0.0;
 	int nrOfInputs, veg = 0;
@@ -38,8 +46,10 @@ int main()
 	*/
 	//print number on cuts
 	//std::cout << dummy.GetResult() << std::endl;
-	std::cout << dummy.TestRun() << std::endl;
-	system("PAUSE");
+	std::cout << dummy.Run() << std::endl;
+	//system("PAUSE");
+	//test->RemoveList();
+	//delete test;
 
 	return 0;
 }

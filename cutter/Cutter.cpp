@@ -1,225 +1,108 @@
 #include "Cutter.h"
-#include <iostream>
 
 Cutter::Cutter()
 {
+	this->m_bestCut = INFINITY;
 	this->m_T = 0;
-	this->m_nrOfCuts = 0;
+}
+
+void Cutter::m_DiscoverNodes(Vertex* v)
+{
+	//we know that we must cut the greatest piece
+	int toCut = v->pieces->GetFirst();
+	int w1, w2 = 0;
+	int toLoop = toCut / 2;
+
+	//find and store all possible ways to cut this piece
+	for (int i = 1; i < toLoop + 1; i++)
+	{
+		w1 = toCut - i;
+		w2 = toCut - w1;
+
+		Vertex* toAdd = new Vertex();
+		toAdd->pieces = v->pieces->CopyList();
+		
+		toAdd->pieces->Insert(w1);
+		toAdd->pieces->Insert(w2);
+		//traversed in graph, one cut was used to get to this node
+		toAdd->cuts = v->cuts + 1;
+
+		//sliced this one up
+		toAdd->pieces->RemoveFirst();
+
+		//change color to gray, we have visited this node
+		toAdd->color = 'g';
+
+
+		//std::cout << toAdd->pieces->PrintAll();
+		//std::cout << "cuts " << toAdd->cuts << std::endl;
+
+		//system("pause");
+
+		//queue it up
+		this->m_queque.push(toAdd);
+	}
+}
+
+bool Cutter::m_OverDelta(Vertex* v) const
+{
+	bool result = false;
+	float nodeT = 0;
+	//get the lowest value
+	nodeT = (float)v->pieces->GetLast();
+	//devide with the highest value, to get the dT
+	nodeT /= (float)v->pieces->GetFirst();
+
+	if (this->m_T < nodeT)
+		result = true;
+	return result;
+}
+
+Cutter::Cutter(float T, Vertex* start)
+{
+	this->m_T = T;
+	this->m_queque.push(start);
 }
 
 Cutter::~Cutter()
 {
-}
+	Vertex* toDestroy = NULL;
 
-void Cutter::SetT(const float &T)
-{
-	this->m_T = T;
-}
-
-bool Cutter::AddVegetable(const int & weight)
-{
-	bool result = true;
-	if (this->m_sl.Insert(weight) == false)
-		result = false;
-	return result;
-}
-
-int Cutter::Run()
-{
-	float deltaT = (float)this->m_sl.GetLast() / (float)this->m_sl.GetFirst();
-	while(deltaT < this->m_T && this->m_nrOfCuts < 500)
+	while (this->m_queque.empty() != true)
 	{
-		int higestVeg = this->m_sl.RemoveFirst();
-		int lowestVeg = this->m_sl.GetLast();
-
-		int w1 = 0;
-		int w2 = 0;
-
-		//goal is to make this piece lower then the next highest but above the lowest
-		
-		//if the veg to be cut become less then the recent lowest
-		//if the highest is a multiple of the lowest 
-		
-		//rounded down
-		if ((higestVeg / 2) >= lowestVeg)
-		{
-			w1 = (higestVeg / 2);
-			w2 = w1;
-
-			//add one more to offset the non symmetrical cut
-			if (higestVeg % 2 == 1)
-				w2++;
-
-			this->m_sl.Insert(w1);
-			this->m_sl.Insert(w2);
-			this->m_nrOfCuts++;
-		}
-
-		else if (higestVeg % lowestVeg == 0)
-		{
-			w1 = higestVeg - lowestVeg;
-			w2 = higestVeg - lowestVeg;
-
-			this->m_sl.Insert(w1);
-			this->m_sl.Insert(w2);
-
-			this->m_nrOfCuts++;
-		}
-		//there is no solution with the parts we have now to satisfy the
-		//condition, we need to decrease the lowest veg piece
-		else
-		{
-
-			//find the lowest cut piece that they share
-			int closestCutVal = higestVeg % lowestVeg;
-
-			//cut the largest piece to this value
-			this->m_sl.Insert(higestVeg - closestCutVal);
-
-			//add remaining
-			this->m_sl.Insert(closestCutVal);
-
-			//add to nrofcuts
-			this->m_nrOfCuts++;
-		}
-		deltaT = (float)this->m_sl.GetLast() / (float)this->m_sl.GetFirst();
-		std::cout << this->m_sl.PrintAll() << std::endl;
-		std::cout << "dT: " << deltaT << " cuts: " << this->m_nrOfCuts << std::endl;
-
-		system("PAUSE");
-		
-
+		toDestroy = this->m_queque.front();
+		//delete toDestroy;
+		this->m_queque.pop();
 	}
-	
-	return 0;
 }
 
-std::string Cutter::TestRun()
+bool Cutter::Run()
 {
-	TestResult result = TestResult();
-	std::stringstream toString;
-/*
-	//test 1
-	this->m_T = 0.99;
-
-	if (this->m_sl.Insert(2000) == false)
-		result.failedRuntime[0] = true;
-	else if (this->m_sl.Insert(3000) == false)
-		result.failedRuntime[0] = true;
-	else if (this->m_sl.Insert(4000) == false)
-		result.failedRuntime[0] = true;
-	else if (this->Run() != 0)
-		result.failedRuntime[0] = true;
-
-	result.nrOfCuts[0] = this->m_nrOfCuts;
-	result.myAnswer[0] = 6;
-
-	this->m_sl.FlushList();
-	this->m_nrOfCuts = 0;
-
-	//test 2
-	this->m_T = 0.80;
-
-	if (this->m_sl.Insert(1000) == false)
-		result.failedRuntime[1] = true;
-	else if (this->m_sl.Insert(1400) == false)
-		result.failedRuntime[1] = true;
-	else if (this->Run() != 0)
-		result.failedRuntime[1] = true;
-
-
-	result.nrOfCuts[1] = this->m_nrOfCuts;
-	result.myAnswer[1] = 3;
-
-	this->m_sl.FlushList();
-	this->m_nrOfCuts = 0;
-
-	//test 3
-	this->m_T = 0.95;
-
-	if (this->m_sl.Insert(99999) == false)
-		result.failedRuntime[2] = true;
-	else if (this->m_sl.Insert(44444) == false)
-		result.failedRuntime[2] = true;
-	else if (this->m_sl.Insert(4865) == false)
-		result.failedRuntime[2] = true;
-	else if (this->Run() != 0)
-		result.failedRuntime[2] = true;
-
-
-	result.nrOfCuts[2] = this->m_nrOfCuts;
-	result.myAnswer[2] = 1;
-
-	this->m_sl.FlushList();
-	this->m_nrOfCuts = 0;
+	Vertex* activeNode = NULL;
 	
-	//test 4
-	this->m_T = 0.99;
 
-	if (this->m_sl.Insert(1) == false)
-		result.failedRuntime[3] = true;
-	else if (this->m_sl.Insert(99999) == false)
-		result.failedRuntime[3] = true;
-	else if (this->Run() != 0)
-		result.failedRuntime[3] = true;
-
-	this->m_sl.FlushList();
-	this->m_nrOfCuts = 0;
-
-	*/
-	//test 5
-
-	this->m_T = 0.80;
-
-	if (this->m_sl.Insert(17) == false)
-		result.failedRuntime[3] = true;
-	else if (this->m_sl.Insert(18) == false)
-		result.failedRuntime[3] = true;
-	else if (this->m_sl.Insert(19) == false)
-		result.failedRuntime[3] = true;
-	else if (this->m_sl.Insert(20) == false)
-		result.failedRuntime[3] = true;
-	else if (this->m_sl.Insert(7) == false)
-		result.failedRuntime[3] = true;
-	else if (this->m_sl.Insert(5) == false)
-		result.failedRuntime[3] = true;
-	else if (this->Run() != 0)
-		result.failedRuntime[3] = true;
-
-
-
-	result.nrOfCuts[3] = this->m_nrOfCuts;
-	result.myAnswer[3] = 99999;
-
-	this->m_sl.FlushList();
-	this->m_nrOfCuts = 0;
-
-
-
-
-	/*
-	Print test results
-	*/
-	for (int i = 3; i < 4; i++)
+	while (this->m_queque.empty() != true)
 	{
-		if (result.myAnswer[i] >= result.nrOfCuts[i] && result.failedRuntime[i] == false)
+		activeNode = this->m_queque.front();
+		if (this->m_OverDelta(activeNode) == false)
 		{
-			toString << "Test " << i + 1 << " SUCCESS" << std::endl;
-			toString << "Result: " << result.nrOfCuts[i] << " myAnsw: " << result.myAnswer[i] << std::endl;
+			//discover new nodes
+			this->m_DiscoverNodes(activeNode);
 		}
 		else
 		{
-			toString << "Test " << i + 1 << " FAILED" << std::endl;
-			toString << "cuts: " << result.nrOfCuts[i] << std::endl;
-			toString << "myAns: " << result.myAnswer[i] << std::endl;
-			toString << "failed Runtime : " << ((result.failedRuntime[i] == true) ? "YES" : "NO") << std::endl;
+			this->m_bestCut = activeNode->cuts;
+			std::cout << "OVER " << this->m_bestCut << std::endl;
+			system("PAUSE");
+			//I do not need to traverse here, since goal is reached
 		}
-		
+		delete activeNode;
+		this->m_queque.pop();
 	}
-	return toString.str();
+
+	
+	//std::cout << this->m_queque.front()->pieces->PrintAll() << std::endl;
+
+	return true;
 }
 
-int Cutter::GetResult() const
-{
-	return this->m_nrOfCuts;
-}

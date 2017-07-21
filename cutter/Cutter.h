@@ -1,15 +1,13 @@
 #ifndef CUTTER_H
 #define CUTTER_H
 
-#include "SortedList.h"
-//#include <string>
-//#include <sstream>
 
-/*
-This class does the calculations to solve the algorithm, it holds a dynamic allocated array
-of ints (m_values) that is expandable should the temporary limit be exceeded, with the function 
-ExpandArray()
-*/
+#include <queue>
+#include "SortedList.h"
+#include <string>
+#include <sstream>
+#include <iostream>
+#include "Vertex.h"
 
 struct TestResult
 {
@@ -28,23 +26,39 @@ struct TestResult
 	}
 };
 
+//struct Node
+//{
+//	SortedList* pieces;
+//	char color;
+//	Node* parent;
+//
+//	Node() 
+//	{
+//		this->color = 'w';
+//		this->parent = NULL;
+//		this->pieces = new SortedList;
+//	}
+//	void InsertTo(int a)
+//	{
+//		this->pieces->Insert(a);
+//	}
+//};
+
 class Cutter
 {
 private:
-	SortedList m_sl;
-	int m_nrOfCuts;
+	std::queue<Vertex*> m_queque;
+	int m_bestCut;
 	float m_T;
+
+	void m_DiscoverNodes(Vertex* v);
+	bool m_OverDelta(Vertex* v) const;
 public:
 	Cutter();
+	Cutter(float T, Vertex* start);
 	virtual ~Cutter();
 
-	void SetT(const float &T);
-	bool AddVegetable(const int &weight);
-
-	int Run();
-	std::string TestRun();
-
-	int GetResult() const;
+	bool Run();
 };
 
 #endif

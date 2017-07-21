@@ -21,7 +21,7 @@ bool SortedList::Insert(int element)
 	Node* toAdd = new Node(element);
 
 	walker = this->m_start;
-	if (walker == NULL)
+	if (walker == NULL || this->m_nrOfElements == 0)
 	{
 		this->m_start = toAdd;
 		this->m_end = toAdd;
@@ -146,6 +146,23 @@ void SortedList::FlushList()
 	this->m_end = NULL;
 
 	this->m_nrOfElements = 0;
+}
+
+SortedList * SortedList::CopyList() const
+{
+	SortedList* copy = new SortedList();
+	Node* walker = this->m_start;
+
+	//empty
+	if (walker != NULL)
+	{
+		while (walker != NULL)
+		{
+			copy->Insert(walker->value);
+			walker = walker->next;
+		}
+	}
+	return copy;
 }
 
 std::string SortedList::PrintAll() const

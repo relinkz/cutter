@@ -38,7 +38,9 @@ public:
 	int RemoveFirst();
 	int RemoveLast();
 	void FlushList();
-	
+
+	SortedList* CopyList() const;
+
 	std::string PrintAll() const;
 };
 
