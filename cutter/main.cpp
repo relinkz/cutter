@@ -8,7 +8,7 @@ int main()
 	
 	Cutter dummy = Cutter();
 	int const SIZE = 20; //sets the capacity of the dynamic allocated array in cutter class
-
+/*
 	float tempT = 0.0;
 	int nrOfInputs, veg = 0;
 
@@ -35,9 +35,10 @@ int main()
 	if (dummy.Run() != 0)
 		return 0; // runtime error
 
+	*/
 	//print number on cuts
-	std::cout << dummy.GetResult() << std::endl;
-
+	//std::cout << dummy.GetResult() << std::endl;
+	std::cout << dummy.TestRun() << std::endl;
 	system("PAUSE");
 
 	return 0;

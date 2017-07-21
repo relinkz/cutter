@@ -1,4 +1,5 @@
 #include "Cutter.h"
+#include <iostream>
 
 Cutter::Cutter()
 {
@@ -56,7 +57,6 @@ int Cutter::Run()
 
 		else if (higestVeg % lowestVeg == 0)
 		{
-			//unsure about this while loop
 			w1 = higestVeg - lowestVeg;
 			w2 = higestVeg - lowestVeg;
 
@@ -83,6 +83,12 @@ int Cutter::Run()
 			this->m_nrOfCuts++;
 		}
 		deltaT = (float)this->m_sl.GetLast() / (float)this->m_sl.GetFirst();
+		std::cout << this->m_sl.PrintAll() << std::endl;
+		std::cout << "dT: " << deltaT << " cuts: " << this->m_nrOfCuts << std::endl;
+
+		system("PAUSE");
+		
+
 	}
 	
 	return 0;
@@ -92,7 +98,7 @@ std::string Cutter::TestRun()
 {
 	TestResult result = TestResult();
 	std::stringstream toString;
-
+/*
 	//test 1
 	this->m_T = 0.99;
 
@@ -129,11 +135,13 @@ std::string Cutter::TestRun()
 	this->m_nrOfCuts = 0;
 
 	//test 3
-	this->m_T = 0.5001;
+	this->m_T = 0.95;
 
 	if (this->m_sl.Insert(99999) == false)
 		result.failedRuntime[2] = true;
 	else if (this->m_sl.Insert(44444) == false)
+		result.failedRuntime[2] = true;
+	else if (this->m_sl.Insert(4865) == false)
 		result.failedRuntime[2] = true;
 	else if (this->Run() != 0)
 		result.failedRuntime[2] = true;
@@ -155,6 +163,30 @@ std::string Cutter::TestRun()
 	else if (this->Run() != 0)
 		result.failedRuntime[3] = true;
 
+	this->m_sl.FlushList();
+	this->m_nrOfCuts = 0;
+
+	*/
+	//test 5
+
+	this->m_T = 0.80;
+
+	if (this->m_sl.Insert(17) == false)
+		result.failedRuntime[3] = true;
+	else if (this->m_sl.Insert(18) == false)
+		result.failedRuntime[3] = true;
+	else if (this->m_sl.Insert(19) == false)
+		result.failedRuntime[3] = true;
+	else if (this->m_sl.Insert(20) == false)
+		result.failedRuntime[3] = true;
+	else if (this->m_sl.Insert(7) == false)
+		result.failedRuntime[3] = true;
+	else if (this->m_sl.Insert(5) == false)
+		result.failedRuntime[3] = true;
+	else if (this->Run() != 0)
+		result.failedRuntime[3] = true;
+
+
 
 	result.nrOfCuts[3] = this->m_nrOfCuts;
 	result.myAnswer[3] = 99999;
@@ -163,10 +195,12 @@ std::string Cutter::TestRun()
 	this->m_nrOfCuts = 0;
 
 
+
+
 	/*
 	Print test results
 	*/
-	for (int i = 0; i < 4; i++)
+	for (int i = 3; i < 4; i++)
 	{
 		if (result.myAnswer[i] >= result.nrOfCuts[i] && result.failedRuntime[i] == false)
 		{
